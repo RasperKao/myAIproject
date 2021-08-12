@@ -1,0 +1,34 @@
+Epoch 00021: loss did not improve from 9.13000
+Epoch 00021: early stopping
+Bambooshoots: 0.6667
+Beansprouts: 0.7712
+Cabbage: 0.4049
+Driedtofu: 0.0880
+Fish: 0.4052
+Friedchickenlegs: 0.3072
+Friedshrimp: 0.6421
+Friedsteak: 0.2176
+Fungus: 0.0000
+Shiitake: 0.5624
+Shrimp: 0.2751
+Slicedmeat: 0.0723
+broccoli: 0.5781
+carrot: 0.1887
+cauliflower: 0.8000
+chicken: 0.1131
+chickenlegs: 0.3082
+corn: 0.6283
+egg: 0.8043
+eggplant: 0.3608
+green: 0.4582
+halfegg: 0.6868
+omelet: 0.4569
+pork: 0.2804
+pumpkin: 0.2651
+ribs: 0.3507
+riceflour: 0.2632
+sausage: 0.4231
+shelledShrimp: 0.6800
+sunegg: 0.7669
+tofu: 0.0000
+mAP: 0.4137

@@ -1,0 +1,60 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Jomhuria", cursive;
+}
+
+body {
+  background-color: #f6f4e8;
+}
+
+header {
+  height: 300px;
+}
+header .row {
+  height: 300px;
+}
+header .row .heading {
+  font-size: 50px;
+
+}
+header .row .dropdown-menu {
+  background-color: rgba(247, 226, 201, 0.5);
+}
+
+section {
+  height: 800px;
+  padding: 150px;
+}
+section h5, section p {
+  color: black;
+  font-weight: bold;
+  font-size: x-large;
+}
+section .slide-background {
+  height: 600px;
+  width: 600px;
+}
+section .slide-background img {
+  opacity: 0.8;
+  height: 600px;
+  width: 600px;
+  padding: 10px;
+}
+
+content {
+  height: 600px;
+}
+content .card {
+  width: 80%;
+  margin: 10%;
+}/*# sourceMappingURL=css.css.map */
+
+form input{
+    margin:15px 0;
+}
+
+.form_color {
+    color: 'red';
+}

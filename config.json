@@ -1,0 +1,40 @@
+{
+    "model" : {
+        "min_input_size":       288,
+        "max_input_size":       448,
+        "anchors":              [37,38, 55,84, 81,49, 90,128, 125,81, 128,206, 190,131, 225,252, 346,331],
+        "labels":               ["Bambooshoots", "Beansprouts", "Cabbage", "Driedtofu", "Fish", "Friedchickenlegs", "Friedshrimp", "Friedsteak", "Fungus", "Shiitake", "Shrimp","Slicedmeat", "broccoli", "carrot", "cauliflower", "chicken", "chickenlegs", "corn", "egg", "eggplant", "green", "halfegg", "omelet", "pork", "pumpkin", "ribs", "riceflour", "sausage", "shelledShrimp", "sunegg", "tofu"]
+    },
+
+    "train": {
+        "train_image_folder":   "C:\\Users\\Casper\\Desktop\\data\\pic\\",
+        "train_annot_folder":   "C:\\Users\\Casper\\Desktop\\data\\anno\\",
+        "cache_name":           "food_train.pkl",
+
+        "train_times":          8,
+        "batch_size":           8,
+        "learning_rate":        1e-4,
+        "nb_epochs":            100,
+        "warmup_epochs":        3,
+        "ignore_thresh":        0.5,
+        "gpus":                 "1",
+
+        "grid_scales":          [1,1,1],
+        "obj_scale":            5,
+        "noobj_scale":          1,
+        "xywh_scale":           1,
+        "class_scale":          1,
+
+        "tensorboard_dir":      "logs",
+        "saved_weights_name":   "food.h5",
+        "debug":                true
+    },
+
+    "valid": {
+        "valid_image_folder":   "",
+        "valid_annot_folder":   "",
+        "cache_name":           "food_test.pkl",
+
+        "valid_times":          1
+    }
+}

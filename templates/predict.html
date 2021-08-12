@@ -1,0 +1,91 @@
+{% extends 'bootstrap/base.html' %}
+
+
+{% block head %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+      <link rel="stylesheet" href="{{url_for('static', filename='css/flip.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}" />
+    <title>HomePage</title>
+  </head>
+{% endblock %}
+
+{% block content %}
+  <body>
+    <header>
+      <div class="container">
+          <div class="row d-flex ">
+              <div class="col-7 align-self-center">
+                  <p class="heading ">食時為你</p>
+                  <p class="fs-3 ms-5 blockquote-footer text-end">為你斤斤計較你的熱量~</p>
+                </div>
+              <div class="col-5 align-self-end">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown ">
+                      <a href="{{ url_for('home') }}"><button type="button" class="btn btn-outline-danger">首頁</button></a>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          我的健康日誌
+                        </button>
+                       <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if current_user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{{ url_for('user_upload') }}">新增飲食日記</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('guest_upload')}}">訪客</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{{ url_for('userdata') }}">今日成就</a></li>
+                        </ul>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                         會員
+                        </button>
+                       <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if current_user.is_authenticated %}
+                             <li><a class="dropdown-item" href="{{ url_for('logout') }}">登出</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('login') }}">登入</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('register') }}">註冊</a></li>
+                            {% endif %}
+                        </ul>
+                      </div>
+                      <a href= "{{ url_for('upload_pdf') }}"><button type="button" class="btn btn-outline-danger">報告</button></a>
+                  </div>
+              </div>
+          </div>
+          <section>
+              <div class="container">
+                  <div class="row">
+                      <div class="col-3">
+              <h1>預測結果</h1>
+              {% for i in range(lens) %}
+               <h2>第{{ i+1 }}: {{ h5s[i] }} 種結果 </h2>
+              <P>預測圖片:<img src="/{{ pics[i] }}" width="300", height="300"></P>
+               <p>預測結果: {{ labels[i] }}</p>
+                <a href="{{ url_for('analyze', pic_id=i, user_id=user_id) }}">
+                    <button type="button" class="btn btn-outline-primary">點我儲存和看詳細分析</button>
+                </a>
+                 <a href="{{ url_for('delete_condition', user_id=user_id) }}">
+                        <button type="button" class="btn btn-outline-primary">重新上傳和更新資料</button>
+                    </a>
+              {% endfor %}
+                          </div>
+                      </div>
+                  </div>
+          </section>
+       </body>
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+          crossorigin="anonymous"
+        ></script>
+        <script src="./app.js"></script>
+      </html>
+{% endblock %}

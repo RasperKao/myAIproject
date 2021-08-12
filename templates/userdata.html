@@ -1,0 +1,161 @@
+{% extends 'bootstrap/base.html' %}
+
+
+{% block head %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+      <link rel="stylesheet" href="{{url_for('static', filename='css/flip.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}" />
+    <title>HomePage</title>
+  </head>
+{% endblock %}
+
+{% block content %}
+  <body>
+    <header>
+      <div class="container">
+          <div class="row d-flex ">
+              <div class="col-7 align-self-center">
+                  <p class="heading ">食時為你</p>
+                  <p class="fs-3 ms-5 blockquote-footer text-end">為你斤斤計較你的熱量~</p>
+                </div>
+              <div class="col-5 align-self-end">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown ">
+                      <a href="{{ url_for('home') }}"><button type="button" class="btn btn-outline-danger">首頁</button></a>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          我的健康日誌
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if current_user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{{ url_for('user_upload') }}">新增飲食日記</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('guest_upload')}}">訪客</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{{ url_for('userdata') }}">今日成就</a></li>
+                        </ul>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                         會員
+                        </button>
+                       <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if current_user.is_authenticated %}
+                      <li><a class="dropdown-item" href="{{ url_for('logout') }}">登出</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('login') }}">登入</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('register') }}">註冊</a></li>
+                            {% endif %}
+                        </ul>
+                      </div>
+                      <a href= "{{ url_for('upload_pdf') }}"><button type="button" class="btn btn-outline-danger">報告</button></a>
+                  </div>
+              </div>
+          </div>
+          <section>
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+               <div class="container">
+            <h1 class="heading">今日{{ today }}所攝取</h1>
+            <p class="description">記錄著你所攝取的食物</p>
+                    {% if conditions %}
+                   <p>你今天共吃了熱量{{ totoal_calories_consumption }}</p>
+                   <p>你今天總共吃的蛋白質{{ total_protrien_consumption }}</p>
+                   <p>你今天還可以攝取的熱量剩下{{ user_can_calories }}</p>
+                   {% else %}
+                   <p>你今天還未進食，別餓肚子囉!</p>
+                   {% endif %}
+
+
+              {% if conditions %}
+             {% for i in range(lens) %}
+            <div class="card1" >
+             <div class="front" style="background-image: url('{{ image_paths[i] }}')">
+                  <p class="large">第{{ i+1 }}餐</p>
+                 {% if conditions[i].comment %}
+                    你的其他備註:{{ conditions[i].comment | safe }}
+                    {% else %}
+                    <p>你的其他備註:無</p>
+                        {% endif %}
+
+              </div>
+              <div class="back">
+                <div>
+              <div class="title"><span class="release_date">({{conditions[i].time}})</span></div>
+                  <div class="rating">
+                      <label>身高{{conditions[i].height}}</label>
+                  </div>
+                    <div class="rating">
+                      <label>體重{{conditions[i].weight}}</label>
+                  </div>
+                    <div class="rating">
+                      <label>運動強度{{conditions[i].stregnth}}</label>
+                  </div>
+                    <div>
+                    <p class="review">分析</p>
+                  <p class="overview">
+                      你吃的東西:{{conditions[i].chinese_decided_label}}<br>
+                      你的這一餐所吃攝取的熱量:{{ conditions[i].daily_already_calories_consumption}}<br>
+                      你這一餐所攝取的蛋白質:{{ conditions[i].daily_already_protien_consumption}}<br>
+                      你目前的BMI狀況:{{ BMI_situations[i] }}<br>
+
+
+                  </p>
+                    </div>
+                  <a href="{{url_for('edit_condition', user_id=conditions[i].id)}}" class="button">修改</a>
+                  <a href="{{ url_for('delete_condition', user_id=conditions[i].id)}}" class="button delete-button">刪除</a>
+
+                </div>
+              </div>
+            </div>
+              {% endfor %}
+              {% endif %}
+          </div>
+          <div class="container text-center add">
+          <a href="{{ url_for('user_upload') }}" class="button">新增飲食日誌</a>
+          </div>
+               {% if conditions %}
+              {% if user_can_calories < 0 %}
+              <div>
+                    <h3>您目前超過所需運動的時間</h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>運動項目</th>
+                            <th>所需時間(分鐘)</th>
+                        </tr>
+
+                        {% for item in work_list %}
+                        <tr>
+                            <td>{{ work_list[item][0][0] }} <br>{{ work_list[item][0][1] }}</td>
+                            <td>{{ work_list[item][1] }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+              {% endif %}
+              {% endif %}
+
+          </section>
+        </body>
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+          crossorigin="anonymous"
+        ></script>
+        <script src="./app.js"></script>
+      </html>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'bootstrap/base.html' %}
+
+
+{% block head %}
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+            crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/flip.css')}}"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}"/>
+    <title>HomePage</title>
+</head>
+{% endblock %}
+
+{% block content %}
+<body>
+<header>
+    <div class="container">
+        <div class="row d-flex ">
+            <div class="col-7 align-self-center">
+                <p class="heading ">食時為你</p>
+                <p class="fs-3 ms-5 blockquote-footer text-end">為你斤斤計較你的熱量~</p>
+            </div>
+            <div class="col-5 align-self-end">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown ">
+                    <a href="{{ url_for('home') }}">
+                        <button type="button" class="btn btn-outline-danger">首頁</button>
+                    </a>
+                </div>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        我的健康日誌
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if current_user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{{ url_for('user_upload') }}">新增飲食日記</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('guest_upload')}}">訪客</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{{ url_for('userdata') }}">今日成就</a></li>
+                        </ul>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                         會員
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if current_user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">登出</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('login') }}">登入</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('register') }}">註冊</a></li>
+                            {% endif %}
+                        </ul>
+                      </div>
+                <a href= "{{ url_for('upload_pdf') }}"><button type="button" class="btn btn-outline-danger">報告</button></a>
+            </div>
+        </div>
+    </div>
+    <section>
+        <div class="container">
+
+            <div class="row">
+                <div class="col-12">
+                    {% if current_user.is_authenticated %}
+                    <p>{{ condition.user.user_name }} 你好!</p>
+                    {% else %}
+                    <p>{{ condition.name }} 你好!</p>
+                    {% endif %}
+                    <p>你的身高:{{ condition.height }}公分</p>
+                    <p>體重:{{ condition.weight }}公斤</p>
+                    <p>年齡:{{ condition.age }}歲</p>
+                    <p>性別: {{ condition.gender }}</p>
+
+                    {% if current_user.is_authenticated %}
+                    {% if condition.comment %}
+                    <p>你的其他備註:{{ condition.comment | safe }}</p>
+                    {% else %}
+                    <p>你的其他備註:無</p>
+                    {% endif%}
+                    {% endif %}
+                </div>
+
+                <div class="col-12">
+                    <P>你的BMI狀況: {{ list[0] }}</P>
+                    <P>你的每日所需卡路里: {{ list[1] }}</P>
+                    <P>你的目前攝取卡路里: {{ list[3] }}</P>
+                    <P>你目前攝取的蛋白質: {{ list[4] }}</P>
+                    <P>你還可以攝取的卡路里量: {{ list[5] }}</P>
+
+                </div>
+
+                <div class="col-12">
+                    <h3>您目前超過所需運動的時間</h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>運動項目</th>
+                            <th>所需時間(分鐘)</th>
+                        </tr>
+
+                        {% for item in list[6] %}
+                        <tr>
+                            <td>{{ list[6][item][0][0] }} <br>{{ list[6][item][0][1] }}</td>
+                            <td>{{ list[6][item][1] }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+                 {% if current_user.is_authenticated: %}
+                <div class="col-12">
+                    <a href="{{ url_for('userdata') }}">
+                        <button type="button" class="btn btn-outline-primary">回到我的日誌</button>
+                    </a>
+                    <a href="{{ url_for('delete_condition', user_id=condition.id) }}">
+                        <button type="button" class="btn btn-outline-primary">再上傳和更新資料</button>
+                    </a>
+
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</body>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"
+></script>
+<script src="./app.js"></script>
+</html>
+{% endblock %}
